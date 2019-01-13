@@ -17,6 +17,7 @@ const chartGroups = [
           'showLegend',
           'legendTitle',
           'legendPosition',
+          'legendColumns',
           'showXAxisLabel',
           'xAxisLabel',
           'showYAxisLabel',

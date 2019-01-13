@@ -81,6 +81,7 @@ export class BarVerticalComponent extends BaseChartComponent {
   @Input() legend = false;
   @Input() legendTitle: string = 'Legend';
   @Input() legendPosition: string = 'right';
+  @Input() legendColumns: number = 2;
   @Input() xAxis;
   @Input() yAxis;
   @Input() showXAxisLabel;
@@ -142,7 +143,8 @@ export class BarVerticalComponent extends BaseChartComponent {
       showYLabel: this.showYAxisLabel,
       showLegend: this.legend,
       legendType: this.schemeType,
-      legendPosition: this.legendPosition
+      legendPosition: this.legendPosition,
+      legendColumns: this.legendColumns
     });
 
     if (this.showDataLabel) {
@@ -213,7 +215,8 @@ export class BarVerticalComponent extends BaseChartComponent {
       colors: undefined,
       domain: [],
       title: undefined,
-      position: this.legendPosition
+      position: this.legendPosition,
+      columns: this.legendColumns
     };
     if (opts.scaleType === 'ordinal') {
       opts.domain = this.xDomain;
