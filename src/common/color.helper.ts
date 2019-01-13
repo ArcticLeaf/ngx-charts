@@ -58,7 +58,7 @@ export class ColorHelper {
     return colorScale;
   }
 
-  getColor(value) {
+  getColor(value, barValue = null) {
     if (this.scaleType === 'linear') {
       const valueScale = scaleLinear()
         .domain(this.domain)
@@ -68,7 +68,8 @@ export class ColorHelper {
     } else {
 
       if(typeof this.customColors === 'function') {
-        return this.customColors(value);
+        // pass the value, barValue *and* the original color value
+        return this.customColors(value, barValue, this.scale(value));
       }
 
       const formattedValue = value.toString();
