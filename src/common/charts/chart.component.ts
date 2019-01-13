@@ -101,7 +101,7 @@ export class ChartComponent implements OnChanges {
         if (this.legendType === 'scaleLegend') {
           legendColumns = 1;
         } else {
-          legendColumns = 2;
+          legendColumns = this.legendOptions && this.legendOptions.columns ? this.legendOptions.columns : 2;
         }
       }
     }

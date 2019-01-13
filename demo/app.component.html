@@ -230,6 +230,7 @@
         [legend]="showLegend"
         [legendTitle]="legendTitle"
         [legendPosition]="legendPosition"
+        [legendColumns]="legendColumns"
         [explodeSlices]="explodeSlices"
         [labels]="showLabels"
         [doughnut]="doughnut"
@@ -1059,6 +1060,10 @@
             <option value="right">Right</option>
             <option value="below">Below</option>
           </select><br/>
+        </div>
+        <div *ngIf="chart.options.includes('legendColumns')">
+          <label>Legend Columns:</label><br/>
+          <input type="number" [(ngModel)]="legendColumns"><br/>
         </div>
         <div *ngIf="chart.options.includes('tooltipDisabled')">
           <label>

@@ -248,6 +248,7 @@ const chartGroups = [
           'showLegend',
           'legendTitle',
           'legendPosition',
+          'legendColumns',
           'doughnut',
           'arcWidth',
           'explodeSlices',
