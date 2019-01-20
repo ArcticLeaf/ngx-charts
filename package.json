@@ -1,6 +1,6 @@
 {
   "name": "@ali/ngx-charts",
-  "version": "10.0.1",
+  "version": "10.0.2",
   "description": "Declarative Charting Framework for Angular2 and beyond!",
   "main": "release/index.js",
   "module": "release/esm.js",
