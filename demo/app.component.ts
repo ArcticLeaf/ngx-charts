@@ -157,6 +157,7 @@ export class AppComponent implements OnInit {
   explodeSlices = false;
   doughnut = false;
   arcWidth = 0.25;
+  centerText = '';
 
   // line, area
   autoScale = true;

@@ -240,6 +240,7 @@
         [gradient]="gradient"
         [tooltipDisabled]="tooltipDisabled"
         [tooltipText]="pieTooltipText"
+        [centerText]="centerText"
         (dblclick)="dblclick($event)"
         (select)="select($event)">
       </ngx-charts-pie-chart>
@@ -1091,6 +1092,10 @@
         <div *ngIf="chart.options.includes('yAxisLabel')">
           <label>Y Axis Label:</label><br/>
           <input type="text" [(ngModel)]="yAxisLabel"><br/>
+        </div>
+        <div *ngIf="chart.options.includes('centerText')">
+          <label>Center Text (requires doughnut):</label><br/>
+          <input type="text" [(ngModel)]="centerText"><br/>
         </div>
         <div *ngIf="chart.options.includes('showLabels')">
           <label>

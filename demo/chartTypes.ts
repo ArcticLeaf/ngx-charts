@@ -251,6 +251,7 @@ const chartGroups = [
           'legendPosition',
           'legendColumns',
           'doughnut',
+          'centerText',
           'arcWidth',
           'explodeSlices',
           'showLabels',

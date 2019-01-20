@@ -46,6 +46,13 @@ import { BaseChartComponent } from '../common/base-chart.component';
           (activate)="onActivate($event)"
           (deactivate)="onDeactivate($event)"
         />
+        <text
+          *ngIf="doughnut && centerText"
+          class="pie-center-text animation"
+          dy=".35em"
+          [style.font-size]="centerTextFontSize">
+          {{ centerText }}
+        </text>
       </svg:g>
     </ngx-charts-chart>
   `,
@@ -73,6 +80,7 @@ export class PieChartComponent extends BaseChartComponent {
   @Input() trimLabels: boolean = true;
   @Input() maxLabelLength: number = 10;
   @Input() tooltipText: any;
+  @Input() centerText: string = null;
 
   @Output() dblclick = new EventEmitter();
   @Output() select = new EventEmitter();
@@ -90,6 +98,7 @@ export class PieChartComponent extends BaseChartComponent {
   dims: any;
   margin = [20, 20, 20, 20];
   legendOptions: any;
+  centerTextFontSize: string = '22px';
 
   update(): void {
     super.update();
@@ -120,6 +129,10 @@ export class PieChartComponent extends BaseChartComponent {
     this.innerRadius = 0;
     if (this.doughnut) {
       this.innerRadius = this.outerRadius * (1 - this.arcWidth);
+      if (this.centerText) {
+        const calculation = Math.round((((this.innerRadius - 10) * 2) / this.centerText.length) * 2);
+        this.centerTextFontSize = `${Math.min(22, calculation)}px`;
+      }
     }
 
     this.domain = this.getDomain();
