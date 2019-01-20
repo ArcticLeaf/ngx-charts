@@ -444,11 +444,11 @@ export class AreaChartStackedComponent extends BaseChartComponent {
       position: this.legendPosition
     };
     if (opts.scaleType === 'ordinal') {
-      opts.domain = this.seriesDomain;
+      opts.domain = this.seriesDomain ? this.seriesDomain.slice().reverse() : this.seriesDomain;
       opts.colors = this.colors;
       opts.title = this.legendTitle;
     } else {
-      opts.domain = this.yDomain;
+      opts.domain = this.yDomain ? this.yDomain.slice().reverse() : this.yDomain;
       opts.colors = this.colors.scale;
     }
     return opts;
