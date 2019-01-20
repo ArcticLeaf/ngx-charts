@@ -1102,7 +1102,7 @@ var ChartComponent = /** @class */ (function () {
                     legendColumns = 1;
                 }
                 else {
-                    legendColumns = 2;
+                    legendColumns = this.legendOptions && this.legendOptions.columns ? this.legendOptions.columns : 2;
                 }
             }
         }
@@ -2805,7 +2805,8 @@ var ColorHelper = /** @class */ (function () {
         }
         return colorScale;
     };
-    ColorHelper.prototype.getColor = function (value) {
+    ColorHelper.prototype.getColor = function (value, barValue) {
+        if (barValue === void 0) { barValue = null; }
         if (this.scaleType === 'linear') {
             var valueScale = scaleLinear()
                 .domain(this.domain)
@@ -2814,7 +2815,8 @@ var ColorHelper = /** @class */ (function () {
         }
         else {
             if (typeof this.customColors === 'function') {
-                return this.customColors(value);
+                // pass the value, barValue *and* the original color value
+                return this.customColors(value, barValue, this.scale(value));
             }
             var formattedValue_1 = value.toString();
             var found = void 0; // todo type customColors
@@ -3263,7 +3265,7 @@ var GridPanelSeriesComponent = /** @class */ (function () {
     };
     GridPanelSeriesComponent.prototype.getGridPanels = function () {
         var _this = this;
-        return this.data.map(function (d, i) {
+        return this.data.map(function (d) {
             var offset;
             var width;
             var height;
@@ -4210,13 +4212,13 @@ var ChartCommonModule = /** @class */ (function () {
 }());
 
 function calculateViewDimensions(_a) {
-    var width = _a.width, height = _a.height, margins = _a.margins, _b = _a.showXAxis, showXAxis = _b === void 0 ? false : _b, _c = _a.showYAxis, showYAxis = _c === void 0 ? false : _c, _d = _a.xAxisHeight, xAxisHeight = _d === void 0 ? 0 : _d, _e = _a.yAxisWidth, yAxisWidth = _e === void 0 ? 0 : _e, _f = _a.showXLabel, showXLabel = _f === void 0 ? false : _f, _g = _a.showYLabel, showYLabel = _g === void 0 ? false : _g, _h = _a.showLegend, showLegend = _h === void 0 ? false : _h, _j = _a.legendType, legendType = _j === void 0 ? 'ordinal' : _j, _k = _a.legendPosition, legendPosition = _k === void 0 ? 'right' : _k, _l = _a.columns, columns = _l === void 0 ? 12 : _l;
+    var width = _a.width, height = _a.height, margins = _a.margins, _b = _a.showXAxis, showXAxis = _b === void 0 ? false : _b, _c = _a.showYAxis, showYAxis = _c === void 0 ? false : _c, _d = _a.xAxisHeight, xAxisHeight = _d === void 0 ? 0 : _d, _e = _a.yAxisWidth, yAxisWidth = _e === void 0 ? 0 : _e, _f = _a.showXLabel, showXLabel = _f === void 0 ? false : _f, _g = _a.showYLabel, showYLabel = _g === void 0 ? false : _g, _h = _a.showLegend, showLegend = _h === void 0 ? false : _h, _j = _a.legendType, legendType = _j === void 0 ? 'ordinal' : _j, _k = _a.legendPosition, legendPosition = _k === void 0 ? 'right' : _k, _l = _a.legendColumns, legendColumns = _l === void 0 ? 2 : _l, _m = _a.columns, columns = _m === void 0 ? 12 : _m;
     var xOffset = margins[3];
     var chartWidth = width;
     var chartHeight = height - margins[0] - margins[2];
     if (showLegend && legendPosition === 'right') {
         if (legendType === 'ordinal') {
-            columns -= 2;
+            columns -= legendColumns;
         }
         else {
             columns -= 1;
@@ -6012,7 +6014,7 @@ var BarHorizontalComponent = /** @class */ (function (_super) {
         var min$$1 = this.xScaleMin
             ? Math.min.apply(Math, [this.xScaleMin].concat(values)) : Math.min.apply(Math, [0].concat(values));
         var max$$1 = this.xScaleMax
-            ? Math.max.apply(Math, [this.xScaleMax].concat(values)) : Math.max.apply(Math, values);
+            ? Math.max.apply(Math, [this.xScaleMax].concat(values)) : Math.max.apply(Math, [0].concat(values));
         return [min$$1, max$$1];
     };
     BarHorizontalComponent.prototype.getYDomain = function () {
@@ -6327,7 +6329,7 @@ var BarHorizontal2DComponent = /** @class */ (function (_super) {
         }
         var min$$1 = Math.min.apply(Math, [0].concat(domain));
         var max$$1 = this.xScaleMax
-            ? Math.max.apply(Math, [this.xScaleMax].concat(domain)) : Math.max.apply(Math, domain);
+            ? Math.max.apply(Math, [this.xScaleMax].concat(domain)) : Math.max.apply(Math, [0].concat(domain));
         return [min$$1, max$$1];
     };
     BarHorizontal2DComponent.prototype.groupTransform = function (group) {
@@ -7172,6 +7174,7 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         _this.legend = false;
         _this.legendTitle = 'Legend';
         _this.legendPosition = 'right';
+        _this.legendColumns = 2;
         _this.tooltipDisabled = false;
         _this.showGridLines = true;
         _this.activeEntries = [];
@@ -7205,7 +7208,8 @@ var BarVerticalComponent = /** @class */ (function (_super) {
             showYLabel: this.showYAxisLabel,
             showLegend: this.legend,
             legendType: this.schemeType,
-            legendPosition: this.legendPosition
+            legendPosition: this.legendPosition,
+            legendColumns: this.legendColumns
         });
         if (this.showDataLabel) {
             this.dims.height -= this.dataLabelMaxHeight.negative;
@@ -7239,7 +7243,7 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         var min$$1 = this.yScaleMin
             ? Math.min.apply(Math, [this.yScaleMin].concat(values)) : Math.min.apply(Math, [0].concat(values));
         var max$$1 = this.yScaleMax
-            ? Math.max.apply(Math, [this.yScaleMax].concat(values)) : Math.max.apply(Math, values);
+            ? Math.max.apply(Math, [this.yScaleMax].concat(values)) : Math.max.apply(Math, [0].concat(values));
         return [min$$1, max$$1];
     };
     BarVerticalComponent.prototype.onClick = function (data) {
@@ -7261,7 +7265,8 @@ var BarVerticalComponent = /** @class */ (function (_super) {
             colors: undefined,
             domain: [],
             title: undefined,
-            position: this.legendPosition
+            position: this.legendPosition,
+            columns: this.legendColumns
         };
         if (opts.scaleType === 'ordinal') {
             opts.domain = this.xDomain;
@@ -7327,6 +7332,10 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         Input(),
         __metadata("design:type", String)
     ], BarVerticalComponent.prototype, "legendPosition", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], BarVerticalComponent.prototype, "legendColumns", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Object)
@@ -7567,7 +7576,7 @@ var BarVertical2DComponent = /** @class */ (function (_super) {
         }
         var min$$1 = Math.min.apply(Math, [0].concat(domain));
         var max$$1 = this.yScaleMax
-            ? Math.max.apply(Math, [this.yScaleMax].concat(domain)) : Math.max.apply(Math, domain);
+            ? Math.max.apply(Math, [this.yScaleMax].concat(domain)) : Math.max.apply(Math, [0].concat(domain));
         return [min$$1, max$$1];
     };
     BarVertical2DComponent.prototype.groupTransform = function (group) {
@@ -8495,7 +8504,7 @@ var SeriesVerticalComponent = /** @class */ (function () {
                 value = (offset1 - offset0).toFixed(2) + '%';
             }
             if (_this.colors.scaleType === 'ordinal') {
-                bar.color = _this.colors.getColor(label);
+                bar.color = _this.colors.getColor(label, value);
             }
             else {
                 if (_this.type === 'standard') {
@@ -10933,8 +10942,8 @@ var LineSeriesComponent = /** @class */ (function () {
             }
             return value;
         })
-            .y0(function (d) { return _this.yScale(d.min ? d.min : d.value); })
-            .y1(function (d) { return _this.yScale(d.max ? d.max : d.value); })
+            .y0(function (d) { return _this.yScale(typeof d.min === 'number' ? d.min : d.value); })
+            .y1(function (d) { return _this.yScale(typeof d.max === 'number' ? d.max : d.value); })
             .curve(this.curve);
     };
     LineSeriesComponent.prototype.getAreaGenerator = function () {
@@ -11458,7 +11467,7 @@ var PolarChartComponent = /** @class */ (function (_super) {
             template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelClick)=\"onClick($event)\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\">\n      <svg:g class=\"polar-chart chart\" [attr.transform]=\"transform\">\n        <svg:g [attr.transform]=\"transformPlot\">\n          <svg:circle\n            class=\"polar-chart-background\"\n            cx=\"0\" cy=\"0\"\n            [attr.r]=\"this.outerRadius\" />\n          <svg:g *ngIf=\"showGridLines\">\n            <svg:circle\n              *ngFor=\"let r of radiusTicks\"\n              class=\"gridline-path radial-gridline-path\"\n              cx=\"0\" cy=\"0\"\n              [attr.r]=\"r\" />\n          </svg:g>\n          <svg:g *ngIf=\"xAxis\">\n            <svg:g ngx-charts-pie-label\n              *ngFor=\"let tick of thetaTicks\"\n              [data]=\"tick\"\n              [radius]=\"outerRadius\"\n              [label]=\"tick.label\"\n              [max]=\"outerRadius\"\n              [value]=\"showGridLines ? 1 : outerRadius\"\n              [explodeSlices]=\"true\"\n              [animations]=\"animations\"\n              [labelTrim]=\"labelTrim\"\n              [labelTrimSize]=\"labelTrimSize\">\n            </svg:g>\n          </svg:g>\n        </svg:g>\n        <svg:g ngx-charts-y-axis\n          [attr.transform]=\"transformYAxis\"\n          *ngIf=\"yAxis\"\n          [yScale]=\"yAxisScale\"\n          [dims]=\"yAxisDims\"\n          [showGridLines]=\"showGridLines\"\n          [showLabel]=\"showYAxisLabel\"\n          [labelText]=\"yAxisLabel\"\n          [tickFormatting]=\"yAxisTickFormatting\"\n          (dimensionsChanged)=\"updateYAxisWidth($event)\">\n        </svg:g>\n        <svg:g ngx-charts-axis-label\n          *ngIf=\"xAxis && showXAxisLabel\"\n          [label]=\"xAxisLabel\"\n          [offset]=\"labelOffset\"\n          [orient]=\"'bottom'\"\n          [height]=\"dims.height\"\n          [width]=\"dims.width\">\n        </svg:g>\n        <svg:g [attr.transform]=\"transformPlot\">\n          <svg:g *ngFor=\"let series of results; trackBy:trackBy\" [@animationState]=\"'active'\">\n            <svg:g ngx-charts-polar-series\n              [gradient]=\"gradient\"\n              [xScale]=\"xScale\"\n              [yScale]=\"yScale\"\n              [colors]=\"colors\"\n              [data]=\"series\"\n              [activeEntries]=\"activeEntries\"\n              [scaleType]=\"scaleType\"\n              [curve]=\"curve\"\n              [rangeFillOpacity]=\"rangeFillOpacity\"\n              [animations]=\"animations\"\n              [tooltipDisabled]=\"tooltipDisabled\"\n              [tooltipTemplate]=\"tooltipTemplate\"\n            />\n          </svg:g>\n        </svg:g>\n      </svg:g>\n    </ngx-charts-chart>\n  ",
             styles: [
                 ".ngx-charts{float:left;overflow:visible}.ngx-charts .arc,.ngx-charts .bar,.ngx-charts .circle{cursor:pointer}.ngx-charts .arc.active,.ngx-charts .arc:hover,.ngx-charts .bar.active,.ngx-charts .bar:hover,.ngx-charts .card.active,.ngx-charts .card:hover,.ngx-charts .cell.active,.ngx-charts .cell:hover{opacity:.8;transition:opacity .1s ease-in-out}.ngx-charts .arc:focus,.ngx-charts .bar:focus,.ngx-charts .card:focus,.ngx-charts .cell:focus{outline:0}.ngx-charts g:focus{outline:0}.ngx-charts .area-series.inactive,.ngx-charts .line-series-range.inactive,.ngx-charts .line-series.inactive,.ngx-charts .polar-series-area.inactive,.ngx-charts .polar-series-path.inactive{transition:opacity .1s ease-in-out;opacity:.2}.ngx-charts .line-highlight{display:none}.ngx-charts .line-highlight.active{display:block}.ngx-charts .area{opacity:.6}.ngx-charts .circle:hover{cursor:pointer}.ngx-charts .label{font-size:12px;font-weight:400}.ngx-charts .tooltip-anchor{fill:#000}.ngx-charts .gridline-path{stroke:#ddd;stroke-width:1;fill:none}.ngx-charts .refline-path{stroke:#a8b2c7;stroke-width:1;stroke-dasharray:5;stroke-dashoffset:5}.ngx-charts .refline-label{font-size:9px}.ngx-charts .reference-area{fill-opacity:.05;fill:#000}.ngx-charts .gridline-path-dotted{stroke:#ddd;stroke-width:1;fill:none;stroke-dasharray:1,20;stroke-dashoffset:3}.ngx-charts .grid-panel rect{fill:none}.ngx-charts .grid-panel.odd rect{fill:rgba(0,0,0,.05)}",
-                ".pie-label{font-size:11px}.pie-label.animation{animation:750ms ease-in fadeIn}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.pie-label-line{stroke-dasharray:100%}.pie-label-line.animation{animation:3s linear drawOut;transition:d 750ms}@keyframes drawOut{from{stroke-dashoffset:100%}to{stroke-dashoffset:0}}",
+                ".pie-label{font-size:11px}.pie-label.animation{animation:750ms ease-in fadeIn}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.pie-label-line{stroke-dasharray:100%}.pie-label-line.animation{animation:3s linear drawOut;transition:d 750ms}@keyframes drawOut{from{stroke-dashoffset:100%}to{stroke-dashoffset:0}}.pie-center-text{color:#000;text-anchor:middle;shape-rendering:crispedges}",
                 ".polar-chart .polar-chart-background{fill:none}.polar-chart .radial-gridline-path{stroke-dasharray:10 10;fill:none}.polar-chart .pie-label-line{stroke:#2f3646}.polar-charts-series .polar-series-area{pointer-events:none}.polar-series-path{pointer-events:none}"
             ],
             encapsulation: ViewEncapsulation.None,
@@ -11910,7 +11919,6 @@ var PieArcComponent = /** @class */ (function () {
     };
     PieArcComponent.prototype.update = function () {
         var calc = this.calculateArc();
-        this.path = calc.startAngle(this.startAngle).endAngle(this.endAngle)();
         this.startOpacity = 0.5;
         this.radialGradientId = 'linearGrad' + id().toString();
         this.gradientFill = "url(#" + this.radialGradientId + ")";
@@ -11922,6 +11930,9 @@ var PieArcComponent = /** @class */ (function () {
                 this.loadAnimation();
                 this.initialized = true;
             }
+        }
+        else {
+            this.path = calc.startAngle(this.startAngle).endAngle(this.endAngle)();
         }
     };
     PieArcComponent.prototype.calculateArc = function () {
@@ -12085,6 +12096,7 @@ var PieChartComponent = /** @class */ (function (_super) {
         _this.legend = false;
         _this.legendTitle = 'Legend';
         _this.legendPosition = 'right';
+        _this.legendColumns = 2;
         _this.explodeSlices = false;
         _this.doughnut = false;
         _this.arcWidth = 0.25;
@@ -12092,11 +12104,13 @@ var PieChartComponent = /** @class */ (function (_super) {
         _this.tooltipDisabled = false;
         _this.trimLabels = true;
         _this.maxLabelLength = 10;
+        _this.centerText = null;
         _this.dblclick = new EventEmitter();
         _this.select = new EventEmitter();
         _this.activate = new EventEmitter();
         _this.deactivate = new EventEmitter();
         _this.margin = [20, 20, 20, 20];
+        _this.centerTextFontSize = '22px';
         return _this;
     }
     PieChartComponent.prototype.update = function () {
@@ -12110,7 +12124,8 @@ var PieChartComponent = /** @class */ (function (_super) {
             height: this.height,
             margins: this.margin,
             showLegend: this.legend,
-            legendPosition: this.legendPosition
+            legendPosition: this.legendPosition,
+            legendColumns: this.legendColumns
         });
         var xOffset = this.margin[3] + this.dims.width / 2;
         var yOffset = this.margin[0] + this.dims.height / 2;
@@ -12125,6 +12140,10 @@ var PieChartComponent = /** @class */ (function (_super) {
         this.innerRadius = 0;
         if (this.doughnut) {
             this.innerRadius = this.outerRadius * (1 - this.arcWidth);
+            if (this.centerText) {
+                var calculation = Math.round((((this.innerRadius - 10) * 2) / this.centerText.length) * 2);
+                this.centerTextFontSize = Math.min(22, calculation) + "px";
+            }
         }
         this.domain = this.getDomain();
         this.data = this.results.sort(function (a, b) {
@@ -12161,7 +12180,8 @@ var PieChartComponent = /** @class */ (function (_super) {
             domain: this.domain,
             colors: this.colors,
             title: this.legendTitle,
-            position: this.legendPosition
+            position: this.legendPosition,
+            columns: this.legendColumns
         };
     };
     PieChartComponent.prototype.onActivate = function (item) {
@@ -12199,6 +12219,10 @@ var PieChartComponent = /** @class */ (function (_super) {
         Input(),
         __metadata("design:type", String)
     ], PieChartComponent.prototype, "legendPosition", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], PieChartComponent.prototype, "legendColumns", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Object)
@@ -12240,6 +12264,10 @@ var PieChartComponent = /** @class */ (function (_super) {
         __metadata("design:type", Object)
     ], PieChartComponent.prototype, "tooltipText", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", String)
+    ], PieChartComponent.prototype, "centerText", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", Object)
     ], PieChartComponent.prototype, "dblclick", void 0);
@@ -12262,10 +12290,10 @@ var PieChartComponent = /** @class */ (function (_super) {
     PieChartComponent = __decorate([
         Component({
             selector: 'ngx-charts-pie-chart',
-            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\">\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [maxLabelLength]=\"maxLabelLength\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          (dblclick)=\"dblclick.emit($event)\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n      </svg:g>\n    </ngx-charts-chart>\n  ",
+            template: "\n    <ngx-charts-chart\n      [view]=\"[width, height]\"\n      [showLegend]=\"legend\"\n      [legendOptions]=\"legendOptions\"\n      [activeEntries]=\"activeEntries\"\n      [animations]=\"animations\"\n      (legendLabelActivate)=\"onActivate($event)\"\n      (legendLabelDeactivate)=\"onDeactivate($event)\"\n      (legendLabelClick)=\"onClick($event)\">\n      <svg:g [attr.transform]=\"translation\" class=\"pie-chart chart\">\n        <svg:g ngx-charts-pie-series\n          [colors]=\"colors\"\n          [series]=\"data\"\n          [showLabels]=\"labels\"\n          [labelFormatting]=\"labelFormatting\"\n          [trimLabels]=\"trimLabels\"\n          [maxLabelLength]=\"maxLabelLength\"\n          [activeEntries]=\"activeEntries\"\n          [innerRadius]=\"innerRadius\"\n          [outerRadius]=\"outerRadius\"\n          [explodeSlices]=\"explodeSlices\"\n          [gradient]=\"gradient\"\n          [animations]=\"animations\"\n          [tooltipDisabled]=\"tooltipDisabled\"\n          [tooltipTemplate]=\"tooltipTemplate\"\n          [tooltipText]=\"tooltipText\"\n          (dblclick)=\"dblclick.emit($event)\"\n          (select)=\"onClick($event)\"\n          (activate)=\"onActivate($event)\"\n          (deactivate)=\"onDeactivate($event)\"\n        />\n        <text\n          *ngIf=\"doughnut && centerText\"\n          class=\"pie-center-text animation\"\n          dy=\".35em\"\n          [style.font-size]=\"centerTextFontSize\">\n          {{ centerText }}\n        </text>\n      </svg:g>\n    </ngx-charts-chart>\n  ",
             styles: [
                 ".ngx-charts{float:left;overflow:visible}.ngx-charts .arc,.ngx-charts .bar,.ngx-charts .circle{cursor:pointer}.ngx-charts .arc.active,.ngx-charts .arc:hover,.ngx-charts .bar.active,.ngx-charts .bar:hover,.ngx-charts .card.active,.ngx-charts .card:hover,.ngx-charts .cell.active,.ngx-charts .cell:hover{opacity:.8;transition:opacity .1s ease-in-out}.ngx-charts .arc:focus,.ngx-charts .bar:focus,.ngx-charts .card:focus,.ngx-charts .cell:focus{outline:0}.ngx-charts g:focus{outline:0}.ngx-charts .area-series.inactive,.ngx-charts .line-series-range.inactive,.ngx-charts .line-series.inactive,.ngx-charts .polar-series-area.inactive,.ngx-charts .polar-series-path.inactive{transition:opacity .1s ease-in-out;opacity:.2}.ngx-charts .line-highlight{display:none}.ngx-charts .line-highlight.active{display:block}.ngx-charts .area{opacity:.6}.ngx-charts .circle:hover{cursor:pointer}.ngx-charts .label{font-size:12px;font-weight:400}.ngx-charts .tooltip-anchor{fill:#000}.ngx-charts .gridline-path{stroke:#ddd;stroke-width:1;fill:none}.ngx-charts .refline-path{stroke:#a8b2c7;stroke-width:1;stroke-dasharray:5;stroke-dashoffset:5}.ngx-charts .refline-label{font-size:9px}.ngx-charts .reference-area{fill-opacity:.05;fill:#000}.ngx-charts .gridline-path-dotted{stroke:#ddd;stroke-width:1;fill:none;stroke-dasharray:1,20;stroke-dashoffset:3}.ngx-charts .grid-panel rect{fill:none}.ngx-charts .grid-panel.odd rect{fill:rgba(0,0,0,.05)}",
-                ".pie-label{font-size:11px}.pie-label.animation{animation:750ms ease-in fadeIn}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.pie-label-line{stroke-dasharray:100%}.pie-label-line.animation{animation:3s linear drawOut;transition:d 750ms}@keyframes drawOut{from{stroke-dashoffset:100%}to{stroke-dashoffset:0}}"
+                ".pie-label{font-size:11px}.pie-label.animation{animation:750ms ease-in fadeIn}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.pie-label-line{stroke-dasharray:100%}.pie-label-line.animation{animation:3s linear drawOut;transition:d 750ms}@keyframes drawOut{from{stroke-dashoffset:100%}to{stroke-dashoffset:0}}.pie-center-text{color:#000;text-anchor:middle;shape-rendering:crispedges}"
             ],
             encapsulation: ViewEncapsulation.None,
             changeDetection: ChangeDetectionStrategy.OnPush
