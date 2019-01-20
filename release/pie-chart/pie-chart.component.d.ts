@@ -6,6 +6,7 @@ export declare class PieChartComponent extends BaseChartComponent {
     legend: boolean;
     legendTitle: string;
     legendPosition: string;
+    legendColumns: number;
     explodeSlices: boolean;
     doughnut: boolean;
     arcWidth: number;
@@ -16,6 +17,7 @@ export declare class PieChartComponent extends BaseChartComponent {
     trimLabels: boolean;
     maxLabelLength: number;
     tooltipText: any;
+    centerText: string;
     dblclick: EventEmitter<{}>;
     select: EventEmitter<{}>;
     activate: EventEmitter<any>;
@@ -30,6 +32,7 @@ export declare class PieChartComponent extends BaseChartComponent {
     dims: any;
     margin: number[];
     legendOptions: any;
+    centerTextFontSize: string;
     update(): void;
     getDomain(): any[];
     onClick(data: any): void;
@@ -40,6 +43,7 @@ export declare class PieChartComponent extends BaseChartComponent {
         colors: ColorHelper;
         title: string;
         position: string;
+        columns: number;
     };
     onActivate(item: any): void;
     onDeactivate(item: any): void;

@@ -6,6 +6,7 @@ export declare class BarVerticalComponent extends BaseChartComponent {
     legend: boolean;
     legendTitle: string;
     legendPosition: string;
+    legendColumns: number;
     xAxis: any;
     yAxis: any;
     showXAxisLabel: any;
@@ -56,6 +57,7 @@ export declare class BarVerticalComponent extends BaseChartComponent {
         domain: any[];
         title: any;
         position: string;
+        columns: number;
     };
     updateYAxisWidth({ width }: {
         width: any;

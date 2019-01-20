@@ -20,3 +20,8 @@
     stroke-dashoffset: 100%; }
   to {
     stroke-dashoffset: 0; } }
+
+.pie-center-text {
+  color: #000;
+  text-anchor: middle;
+  shape-rendering: crispedges; }

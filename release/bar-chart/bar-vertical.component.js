@@ -32,6 +32,7 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         _this.legend = false;
         _this.legendTitle = 'Legend';
         _this.legendPosition = 'right';
+        _this.legendColumns = 2;
         _this.tooltipDisabled = false;
         _this.showGridLines = true;
         _this.activeEntries = [];
@@ -65,7 +66,8 @@ var BarVerticalComponent = /** @class */ (function (_super) {
             showYLabel: this.showYAxisLabel,
             showLegend: this.legend,
             legendType: this.schemeType,
-            legendPosition: this.legendPosition
+            legendPosition: this.legendPosition,
+            legendColumns: this.legendColumns
         });
         if (this.showDataLabel) {
             this.dims.height -= this.dataLabelMaxHeight.negative;
@@ -99,7 +101,7 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         var min = this.yScaleMin
             ? Math.min.apply(Math, [this.yScaleMin].concat(values)) : Math.min.apply(Math, [0].concat(values));
         var max = this.yScaleMax
-            ? Math.max.apply(Math, [this.yScaleMax].concat(values)) : Math.max.apply(Math, values);
+            ? Math.max.apply(Math, [this.yScaleMax].concat(values)) : Math.max.apply(Math, [0].concat(values));
         return [min, max];
     };
     BarVerticalComponent.prototype.onClick = function (data) {
@@ -121,7 +123,8 @@ var BarVerticalComponent = /** @class */ (function (_super) {
             colors: undefined,
             domain: [],
             title: undefined,
-            position: this.legendPosition
+            position: this.legendPosition,
+            columns: this.legendColumns
         };
         if (opts.scaleType === 'ordinal') {
             opts.domain = this.xDomain;
@@ -186,6 +189,10 @@ var BarVerticalComponent = /** @class */ (function (_super) {
         Input(),
         __metadata("design:type", String)
     ], BarVerticalComponent.prototype, "legendPosition", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], BarVerticalComponent.prototype, "legendColumns", void 0);
     __decorate([
         Input(),
         __metadata("design:type", Object)
