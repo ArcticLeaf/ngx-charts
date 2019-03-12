@@ -22,7 +22,7 @@ import { TooltipService } from '../tooltip';
       <svg
         class="ngx-charts"
         [attr.width]="chartWidth"
-        [attr.height]="view[1]">
+        [attr.height]="chartHeight">
         <ng-content></ng-content>
       </svg>
       <ngx-charts-scale-legend
@@ -78,9 +78,11 @@ export class ChartComponent implements OnChanges {
   @Output() legendLabelActivate: EventEmitter<any> = new EventEmitter();
   @Output() legendLabelDeactivate: EventEmitter<any> = new EventEmitter();
 
-  chartWidth: any;
   title: any;
+  chartWidth: any;
+  chartHeight: any;
   legendWidth: any;
+  legendHeight: any;
 
   constructor(
     private vcr: ViewContainerRef,
@@ -112,6 +114,13 @@ export class ChartComponent implements OnChanges {
     this.legendWidth = (!this.legendOptions || this.legendOptions.position === 'right')
       ? ~~(this.view[0] * legendColumns / 12.0)
       : this.chartWidth;
+
+    this.chartHeight = (this.legendOptions && this.legendOptions.position === 'below')
+      ? ~~(this.view[1] - 72.0)
+      : this.view[1];
+    this.legendHeight = (!this.legendOptions || this.legendOptions.position === 'right')
+      ? this.chartHeight
+      : 72.0;
   }
 
   getLegendType(): string {
