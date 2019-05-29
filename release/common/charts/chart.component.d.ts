@@ -15,9 +15,11 @@ export declare class ChartComponent implements OnChanges {
     legendLabelClick: EventEmitter<any>;
     legendLabelActivate: EventEmitter<any>;
     legendLabelDeactivate: EventEmitter<any>;
-    chartWidth: any;
     title: any;
+    chartWidth: any;
+    chartHeight: any;
     legendWidth: any;
+    legendHeight: any;
     constructor(vcr: ViewContainerRef, tooltipService: TooltipService);
     ngOnChanges(changes: SimpleChanges): void;
     update(): void;

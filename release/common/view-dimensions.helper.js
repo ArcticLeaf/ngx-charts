@@ -3,12 +3,17 @@ export function calculateViewDimensions(_a) {
     var xOffset = margins[3];
     var chartWidth = width;
     var chartHeight = height - margins[0] - margins[2];
-    if (showLegend && legendPosition === 'right') {
-        if (legendType === 'ordinal') {
-            columns -= legendColumns;
+    if (showLegend) {
+        if (legendPosition === 'right') {
+            if (legendType === 'ordinal') {
+                columns -= legendColumns;
+            }
+            else {
+                columns -= 1;
+            }
         }
-        else {
-            columns -= 1;
+        else if (legendPosition === 'below') {
+            chartHeight -= 72; // TODO: this is a hack for now rather tan trying to figure out the exact height
         }
     }
     chartWidth = chartWidth * columns / 12;

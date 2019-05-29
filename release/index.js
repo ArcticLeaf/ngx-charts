@@ -1,5 +1,5 @@
 /**
- * ngx-charts v"10.0.4" (https://github.com/swimlane/ngx-charts)
+ * ngx-charts v"10.0.7" (https://github.com/swimlane/ngx-charts)
  * Copyright 2016
  * Licensed under MIT
  */
@@ -133,7 +133,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, ".chart-legend {\n  display: inline-block;\n  padding: 0;\n  width: auto !important; }\n  .chart-legend .legend-title {\n    white-space: nowrap;\n    overflow: hidden;\n    margin-left: 10px;\n    margin-bottom: 5px;\n    font-size: 14px;\n    font-weight: bold; }\n  .chart-legend ul, .chart-legend li {\n    padding: 0;\n    margin: 0;\n    list-style: none; }\n  .chart-legend .horizontal-legend li {\n    display: inline-block; }\n  .chart-legend .legend-wrap {\n    width: calc(100% - 10px); }\n  .chart-legend .legend-labels {\n    line-height: 85%;\n    list-style: none;\n    text-align: left;\n    float: left;\n    width: 100%;\n    border-radius: 3px;\n    overflow-y: auto;\n    overflow-x: hidden;\n    white-space: nowrap;\n    background: rgba(0, 0, 0, 0.05); }\n  .chart-legend .legend-label {\n    cursor: pointer;\n    font-size: 90%;\n    margin: 8px;\n    color: #AFB7C8; }\n    .chart-legend .legend-label:hover {\n      color: #000;\n      -webkit-transition: 0.2s;\n      transition: 0.2s; }\n    .chart-legend .legend-label .active .legend-label-text {\n      color: #000; }\n  .chart-legend .legend-label-color {\n    display: inline-block;\n    height: 15px;\n    width: 15px;\n    margin-right: 5px;\n    color: #5b646b;\n    border-radius: 3px; }\n  .chart-legend .legend-label-text {\n    display: inline-block;\n    vertical-align: top;\n    line-height: 15px;\n    font-size: 12px;\n    width: calc(100% - 20px);\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden; }\n  .chart-legend .legend-title-text {\n    vertical-align: bottom;\n    display: inline-block;\n    line-height: 16px;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n", ""]);
+exports.push([module.i, ".chart-legend {\n  display: inline-block;\n  padding: 0;\n  width: auto !important; }\n  .chart-legend .legend-title {\n    white-space: nowrap;\n    overflow: hidden;\n    margin-left: 10px;\n    margin-bottom: 5px;\n    font-size: 14px;\n    font-weight: bold; }\n  .chart-legend ul, .chart-legend li {\n    padding: 0;\n    margin: 0;\n    list-style: none; }\n  .chart-legend .legend-wrap {\n    width: calc(100% - 10px); }\n  .chart-legend .legend-labels {\n    line-height: 85%;\n    list-style: none;\n    text-align: left;\n    float: left;\n    width: 100%;\n    border-radius: 3px;\n    overflow-y: auto;\n    overflow-x: hidden;\n    white-space: nowrap;\n    background: rgba(0, 0, 0, 0.05); }\n    .chart-legend .legend-labels.horizontal-legend {\n      overflow-y: hidden;\n      overflow-x: auto; }\n      .chart-legend .legend-labels.horizontal-legend li {\n        display: inline-block; }\n  .chart-legend .legend-label {\n    cursor: pointer;\n    font-size: 90%;\n    margin: 8px;\n    color: #AFB7C8; }\n    .chart-legend .legend-label:hover {\n      color: #000;\n      -webkit-transition: 0.2s;\n      transition: 0.2s; }\n    .chart-legend .legend-label .active .legend-label-text {\n      color: #000; }\n  .chart-legend .legend-label-color {\n    display: inline-block;\n    height: 15px;\n    width: 15px;\n    margin-right: 5px;\n    color: #5b646b;\n    border-radius: 3px; }\n  .chart-legend .legend-label-text {\n    display: inline-block;\n    vertical-align: top;\n    line-height: 15px;\n    font-size: 12px;\n    width: calc(100% - 20px);\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden; }\n  .chart-legend .legend-title-text {\n    vertical-align: bottom;\n    display: inline-block;\n    line-height: 16px;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis; }\n", ""]);
 
 // exports
 
@@ -8133,6 +8133,12 @@ var ChartComponent = /** @class */ (function () {
         this.legendWidth = (!this.legendOptions || this.legendOptions.position === 'right')
             ? ~~(this.view[0] * legendColumns / 12.0)
             : this.chartWidth;
+        this.chartHeight = (this.legendOptions && this.legendOptions.position === 'below')
+            ? ~~(this.view[1] - 72.0)
+            : this.view[1];
+        this.legendHeight = (!this.legendOptions || this.legendOptions.position === 'right')
+            ? this.chartHeight
+            : 72.0;
     };
     ChartComponent.prototype.getLegendType = function () {
         if (this.legendOptions.scaleType === 'linear') {
@@ -8194,7 +8200,7 @@ var ChartComponent = /** @class */ (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             providers: [__WEBPACK_IMPORTED_MODULE_2__tooltip__["g" /* TooltipService */]],
             selector: 'ngx-charts-chart',
-            template: "\n    <div\n      class=\"ngx-charts-outer\"\n      [style.width.px]=\"view[0]\"\n      [@animationState]=\"'active'\"\n      [@.disabled]=\"!animations\">\n      <svg\n        class=\"ngx-charts\"\n        [attr.width]=\"chartWidth\"\n        [attr.height]=\"view[1]\">\n        <ng-content></ng-content>\n      </svg>\n      <ngx-charts-scale-legend\n        *ngIf=\"showLegend && legendType === 'scaleLegend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [valueRange]=\"legendOptions.domain\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\">\n      </ngx-charts-scale-legend>\n      <ngx-charts-legend\n        *ngIf=\"showLegend && legendType === 'legend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [data]=\"legendOptions.domain\"\n        [title]=\"legendOptions.title\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\"\n        [activeEntries]=\"activeEntries\"\n        (labelClick)=\"legendLabelClick.emit($event)\"\n        (labelActivate)=\"legendLabelActivate.emit($event)\"\n        (labelDeactivate)=\"legendLabelDeactivate.emit($event)\">\n      </ngx-charts-legend>\n    </div>\n  ",
+            template: "\n    <div\n      class=\"ngx-charts-outer\"\n      [style.width.px]=\"view[0]\"\n      [@animationState]=\"'active'\"\n      [@.disabled]=\"!animations\">\n      <svg\n        class=\"ngx-charts\"\n        [attr.width]=\"chartWidth\"\n        [attr.height]=\"chartHeight\">\n        <ng-content></ng-content>\n      </svg>\n      <ngx-charts-scale-legend\n        *ngIf=\"showLegend && legendType === 'scaleLegend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [valueRange]=\"legendOptions.domain\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\">\n      </ngx-charts-scale-legend>\n      <ngx-charts-legend\n        *ngIf=\"showLegend && legendType === 'legend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [data]=\"legendOptions.domain\"\n        [title]=\"legendOptions.title\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\"\n        [activeEntries]=\"activeEntries\"\n        (labelClick)=\"legendLabelClick.emit($event)\"\n        (labelActivate)=\"legendLabelActivate.emit($event)\"\n        (labelDeactivate)=\"legendLabelDeactivate.emit($event)\">\n      </ngx-charts-legend>\n    </div>\n  ",
             changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush,
             animations: [
                 Object(__WEBPACK_IMPORTED_MODULE_1__angular_animations__["trigger"])('animationState', [
@@ -11820,12 +11826,17 @@ function calculateViewDimensions(_a) {
     var xOffset = margins[3];
     var chartWidth = width;
     var chartHeight = height - margins[0] - margins[2];
-    if (showLegend && legendPosition === 'right') {
-        if (legendType === 'ordinal') {
-            columns -= legendColumns;
+    if (showLegend) {
+        if (legendPosition === 'right') {
+            if (legendType === 'ordinal') {
+                columns -= legendColumns;
+            }
+            else {
+                columns -= 1;
+            }
         }
-        else {
-            columns -= 1;
+        else if (legendPosition === 'below') {
+            chartHeight -= 72; // TODO: this is a hack for now rather tan trying to figure out the exact height
         }
     }
     chartWidth = chartWidth * columns / 12;
