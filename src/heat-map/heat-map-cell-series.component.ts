@@ -48,7 +48,7 @@ export class HeatCellSeriesComponent implements OnChanges, OnInit {
   @Input() tooltipText: any;
   @Input() tooltipTemplate: TemplateRef<any>;
   @Input() animations: boolean = true;
-  
+
   @Output() select = new EventEmitter();
 
   cells: any[];
@@ -81,7 +81,7 @@ export class HeatCellSeriesComponent implements OnChanges, OnInit {
           y: this.yScale(cell.name),
           width: this.xScale.bandwidth(),
           height: this.yScale.bandwidth(),
-          fill: this.colors.getColor(value),
+          fill: this.colors.getColor(value, cell),
           data: value,
           label: formatLabel(cell.name),
           series: row.name

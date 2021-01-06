@@ -10029,7 +10029,7 @@ var HeatCellSeriesComponent = /** @class */ (function () {
                     y: _this.yScale(cell.name),
                     width: _this.xScale.bandwidth(),
                     height: _this.yScale.bandwidth(),
-                    fill: _this.colors.getColor(value),
+                    fill: _this.colors.getColor(value, cell),
                     data: value,
                     label: formatLabel(cell.name),
                     series: row.name

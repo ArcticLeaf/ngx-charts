@@ -1,5 +1,5 @@
 /**
- * ngx-charts v"10.0.8" (https://github.com/swimlane/ngx-charts)
+ * ngx-charts v"10.0.9" (https://github.com/swimlane/ngx-charts)
  * Copyright 2016
  * Licensed under MIT
  */
@@ -13171,7 +13171,7 @@ var HeatCellSeriesComponent = /** @class */ (function () {
                     y: _this.yScale(cell.name),
                     width: _this.xScale.bandwidth(),
                     height: _this.yScale.bandwidth(),
-                    fill: _this.colors.getColor(value),
+                    fill: _this.colors.getColor(value, cell),
                     data: value,
                     label: Object(__WEBPACK_IMPORTED_MODULE_1__common_label_helper__["a" /* formatLabel */])(cell.name),
                     series: row.name
