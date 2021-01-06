@@ -10247,7 +10247,7 @@ var HeatMapComponent = /** @class */ (function (_super) {
         this.select.emit(data);
     };
     HeatMapComponent.prototype.setColors = function () {
-        this.colors = new ColorHelper(this.scheme, this.scaleType, this.valueDomain);
+        this.colors = new ColorHelper(this.scheme, this.scaleType, this.valueDomain, this.customColors);
     };
     HeatMapComponent.prototype.getLegendOptions = function () {
         return {

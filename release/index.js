@@ -1,5 +1,5 @@
 /**
- * ngx-charts v"10.0.7" (https://github.com/swimlane/ngx-charts)
+ * ngx-charts v"10.0.8" (https://github.com/swimlane/ngx-charts)
  * Copyright 2016
  * Licensed under MIT
  */
@@ -13570,7 +13570,7 @@ var HeatMapComponent = /** @class */ (function (_super) {
         this.select.emit(data);
     };
     HeatMapComponent.prototype.setColors = function () {
-        this.colors = new __WEBPACK_IMPORTED_MODULE_4__common_color_helper__["a" /* ColorHelper */](this.scheme, this.scaleType, this.valueDomain);
+        this.colors = new __WEBPACK_IMPORTED_MODULE_4__common_color_helper__["a" /* ColorHelper */](this.scheme, this.scaleType, this.valueDomain, this.customColors);
     };
     HeatMapComponent.prototype.getLegendOptions = function () {
         return {
