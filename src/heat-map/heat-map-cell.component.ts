@@ -25,6 +25,7 @@ import { id } from '../utils/id';
       </defs>
       <svg:rect
         [attr.fill]="gradient ? gradientUrl : fill"
+        [attr.stroke]="stroke"
         rx="3"
         [attr.width]="width"
         [attr.height]="height"
@@ -39,6 +40,7 @@ import { id } from '../utils/id';
 export class HeatMapCellComponent implements OnChanges {
 
   @Input() fill;
+  @Input() stroke;
   @Input() x;
   @Input() y;
   @Input() width;

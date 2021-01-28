@@ -22,6 +22,7 @@ import { formatLabel } from '../common/label.helper';
       [width]="c.width"
       [height]="c.height"
       [fill]="c.fill"
+      [stroke]="c.stroke"
       [data]="c.data"
       (select)="onClick($event, c.label, c.series)"
       [gradient]="gradient"
@@ -81,7 +82,8 @@ export class HeatCellSeriesComponent implements OnChanges, OnInit {
           y: this.yScale(cell.name),
           width: this.xScale.bandwidth(),
           height: this.yScale.bandwidth(),
-          fill: this.colors.getColor(value, cell),
+          fill: this.colors.getColor(value, cell, 'fill'),
+          stroke: this.colors.getColor(value, cell, 'stroke'),
           data: value,
           label: formatLabel(cell.name),
           series: row.name
