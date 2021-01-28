@@ -45,8 +45,9 @@ var ColorHelper = /** @class */ (function () {
         }
         return colorScale;
     };
-    ColorHelper.prototype.getColor = function (value, barValue) {
+    ColorHelper.prototype.getColor = function (value, barValue, type) {
         if (barValue === void 0) { barValue = null; }
+        if (type === void 0) { type = 'fill'; }
         if (this.scaleType === 'linear') {
             var valueScale = scaleLinear()
                 .domain(this.domain)
@@ -56,7 +57,7 @@ var ColorHelper = /** @class */ (function () {
         else {
             if (typeof this.customColors === 'function') {
                 // pass the value, barValue *and* the original color value
-                return this.customColors(value, barValue, this.scale(value));
+                return this.customColors(value, barValue, this.scale(value), type);
             }
             var formattedValue_1 = value.toString();
             var found = void 0; // todo type customColors

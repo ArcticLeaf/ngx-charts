@@ -6,6 +6,6 @@ export declare class ColorHelper {
     customColors: any;
     constructor(scheme: any, type: any, domain: any, customColors?: any);
     generateColorScheme(scheme: any, type: any, domain: any): any;
-    getColor(value: any, barValue?: any): any;
+    getColor(value: any, barValue?: any, type?: string): any;
     getLinearGradientStops(value: any, start: any): any[];
 }
