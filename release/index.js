@@ -1,5 +1,5 @@
 /**
- * ngx-charts v"10.0.10" (https://github.com/swimlane/ngx-charts)
+ * ngx-charts v"10.0.11" (https://github.com/swimlane/ngx-charts)
  * Copyright 2016
  * Licensed under MIT
  */
@@ -13174,6 +13174,7 @@ var HeatCellSeriesComponent = /** @class */ (function () {
                     height: _this.yScale.bandwidth(),
                     fill: _this.colors.getColor(value, cell, 'fill'),
                     stroke: _this.colors.getColor(value, cell, 'stroke'),
+                    strokeWidth: cell.strokeWidth || 0,
                     data: value,
                     label: Object(__WEBPACK_IMPORTED_MODULE_1__common_label_helper__["a" /* formatLabel */])(cell.name),
                     series: row.name
@@ -13327,6 +13328,10 @@ var HeatMapCellComponent = /** @class */ (function () {
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
+    ], HeatMapCellComponent.prototype, "strokeWidth", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
     ], HeatMapCellComponent.prototype, "x", void 0);
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
@@ -13363,7 +13368,7 @@ var HeatMapCellComponent = /** @class */ (function () {
     HeatMapCellComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'g[ngx-charts-heat-map-cell]',
-            template: "\n    <svg:g [attr.transform]=\"transform\" class=\"cell\">\n      <defs *ngIf=\"gradient\">\n        <svg:g ngx-charts-svg-linear-gradient\n          orientation=\"vertical\"\n          [name]=\"gradientId\"\n          [stops]=\"gradientStops\"\n        />\n      </defs>\n      <svg:rect\n        [attr.fill]=\"gradient ? gradientUrl : fill\"\n        [attr.stroke]=\"stroke\"\n        rx=\"3\"\n        [attr.width]=\"width\"\n        [attr.height]=\"height\"\n        class=\"cell\"\n        style=\"cursor: pointer\"\n        (click)=\"onClick()\"\n      />\n    </svg:g>\n  ",
+            template: "\n    <svg:g [attr.transform]=\"transform\" class=\"cell\">\n      <defs *ngIf=\"gradient\">\n        <svg:g ngx-charts-svg-linear-gradient\n          orientation=\"vertical\"\n          [name]=\"gradientId\"\n          [stops]=\"gradientStops\"\n        />\n      </defs>\n      <svg:rect\n        [attr.fill]=\"gradient ? gradientUrl : fill\"\n        [attr.stroke]=\"stroke\"\n        [attr.stroke-width]=\"strokeWidth\"\n        rx=\"3\"\n        [attr.width]=\"width\"\n        [attr.height]=\"height\"\n        class=\"cell\"\n        style=\"cursor: pointer\"\n        (click)=\"onClick()\"\n      />\n    </svg:g>\n  ",
             changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]])

@@ -41,6 +41,7 @@ var HeatCellSeriesComponent = /** @class */ (function () {
                     height: _this.yScale.bandwidth(),
                     fill: _this.colors.getColor(value, cell, 'fill'),
                     stroke: _this.colors.getColor(value, cell, 'stroke'),
+                    strokeWidth: cell.strokeWidth || 0,
                     data: value,
                     label: formatLabel(cell.name),
                     series: row.name

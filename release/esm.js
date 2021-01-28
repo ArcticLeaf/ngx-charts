@@ -9960,6 +9960,10 @@ var HeatMapCellComponent = /** @class */ (function () {
     __decorate([
         Input(),
         __metadata("design:type", Object)
+    ], HeatMapCellComponent.prototype, "strokeWidth", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
     ], HeatMapCellComponent.prototype, "x", void 0);
     __decorate([
         Input(),
@@ -9996,7 +10000,7 @@ var HeatMapCellComponent = /** @class */ (function () {
     HeatMapCellComponent = __decorate([
         Component({
             selector: 'g[ngx-charts-heat-map-cell]',
-            template: "\n    <svg:g [attr.transform]=\"transform\" class=\"cell\">\n      <defs *ngIf=\"gradient\">\n        <svg:g ngx-charts-svg-linear-gradient\n          orientation=\"vertical\"\n          [name]=\"gradientId\"\n          [stops]=\"gradientStops\"\n        />\n      </defs>\n      <svg:rect\n        [attr.fill]=\"gradient ? gradientUrl : fill\"\n        [attr.stroke]=\"stroke\"\n        rx=\"3\"\n        [attr.width]=\"width\"\n        [attr.height]=\"height\"\n        class=\"cell\"\n        style=\"cursor: pointer\"\n        (click)=\"onClick()\"\n      />\n    </svg:g>\n  ",
+            template: "\n    <svg:g [attr.transform]=\"transform\" class=\"cell\">\n      <defs *ngIf=\"gradient\">\n        <svg:g ngx-charts-svg-linear-gradient\n          orientation=\"vertical\"\n          [name]=\"gradientId\"\n          [stops]=\"gradientStops\"\n        />\n      </defs>\n      <svg:rect\n        [attr.fill]=\"gradient ? gradientUrl : fill\"\n        [attr.stroke]=\"stroke\"\n        [attr.stroke-width]=\"strokeWidth\"\n        rx=\"3\"\n        [attr.width]=\"width\"\n        [attr.height]=\"height\"\n        class=\"cell\"\n        style=\"cursor: pointer\"\n        (click)=\"onClick()\"\n      />\n    </svg:g>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush
         }),
         __metadata("design:paramtypes", [typeof (_a = typeof ElementRef !== "undefined" && ElementRef) === "function" ? _a : Object])
@@ -10036,6 +10040,7 @@ var HeatCellSeriesComponent = /** @class */ (function () {
                     height: _this.yScale.bandwidth(),
                     fill: _this.colors.getColor(value, cell, 'fill'),
                     stroke: _this.colors.getColor(value, cell, 'stroke'),
+                    strokeWidth: cell.strokeWidth || 0,
                     data: value,
                     label: formatLabel(cell.name),
                     series: row.name

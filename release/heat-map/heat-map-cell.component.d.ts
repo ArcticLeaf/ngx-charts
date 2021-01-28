@@ -2,6 +2,7 @@ import { EventEmitter, SimpleChanges, ElementRef, OnChanges } from '@angular/cor
 export declare class HeatMapCellComponent implements OnChanges {
     fill: any;
     stroke: any;
+    strokeWidth: any;
     x: any;
     y: any;
     width: any;
