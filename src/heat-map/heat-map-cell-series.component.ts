@@ -23,6 +23,7 @@ import { formatLabel } from '../common/label.helper';
       [height]="c.height"
       [fill]="c.fill"
       [stroke]="c.stroke"
+      [strokeWidth]="c.strokeWidth"
       [data]="c.data"
       (select)="onClick($event, c.label, c.series)"
       [gradient]="gradient"
