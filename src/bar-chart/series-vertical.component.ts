@@ -191,7 +191,7 @@ export class SeriesVerticalComponent implements OnChanges {
       }
 
       if (this.colors.scaleType === 'ordinal') {
-        bar.color = this.colors.getColor(label, value);
+        bar.color = this.colors.getColor(label, value, null, this.series);
       } else {
         if (this.type === 'standard') {
           bar.color = this.colors.getColor(value);

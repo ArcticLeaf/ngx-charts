@@ -105,7 +105,7 @@ var SeriesVerticalComponent = /** @class */ (function () {
                 value = (offset1 - offset0).toFixed(2) + '%';
             }
             if (_this.colors.scaleType === 'ordinal') {
-                bar.color = _this.colors.getColor(label, value);
+                bar.color = _this.colors.getColor(label, value, null, _this.series);
             }
             else {
                 if (_this.type === 'standard') {

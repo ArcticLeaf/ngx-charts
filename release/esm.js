@@ -2811,9 +2811,10 @@ var ColorHelper = /** @class */ (function () {
         }
         return colorScale;
     };
-    ColorHelper.prototype.getColor = function (value, barValue, type) {
+    ColorHelper.prototype.getColor = function (value, barValue, type, extraData) {
         if (barValue === void 0) { barValue = null; }
         if (type === void 0) { type = 'fill'; }
+        if (extraData === void 0) { extraData = null; }
         if (this.scaleType === 'linear') {
             var valueScale = scaleLinear()
                 .domain(this.domain)
@@ -2823,7 +2824,7 @@ var ColorHelper = /** @class */ (function () {
         else {
             if (typeof this.customColors === 'function') {
                 // pass the value, barValue *and* the original color value
-                return this.customColors(value, barValue, this.scale(value), type);
+                return this.customColors(value, barValue, this.scale(value), type, extraData);
             }
             var formattedValue_1 = value.toString();
             var found = void 0; // todo type customColors
@@ -8516,7 +8517,7 @@ var SeriesVerticalComponent = /** @class */ (function () {
                 value = (offset1 - offset0).toFixed(2) + '%';
             }
             if (_this.colors.scaleType === 'ordinal') {
-                bar.color = _this.colors.getColor(label, value);
+                bar.color = _this.colors.getColor(label, value, null, _this.series);
             }
             else {
                 if (_this.type === 'standard') {
