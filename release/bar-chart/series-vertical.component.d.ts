@@ -19,6 +19,7 @@ export declare class SeriesVerticalComponent implements OnChanges {
     animations: boolean;
     showDataLabel: boolean;
     dataLabelFormatting: any;
+    stackedBarsGap: number;
     select: EventEmitter<{}>;
     activate: EventEmitter<{}>;
     deactivate: EventEmitter<{}>;

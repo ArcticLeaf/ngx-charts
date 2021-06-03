@@ -93,6 +93,7 @@ export class SeriesVerticalComponent implements OnChanges {
   @Input() animations: boolean = true;
   @Input() showDataLabel: boolean = false;
   @Input() dataLabelFormatting: any;
+  @Input() stackedBarsGap: number = 0;
 
   @Output() select = new EventEmitter();
   @Output() activate = new EventEmitter();
@@ -164,9 +165,10 @@ export class SeriesVerticalComponent implements OnChanges {
         const offset1 = offset0 + value;
         d0[d0Type] += value;
 
-        bar.height = this.yScale(offset0) - this.yScale(offset1);
+        // we remove the gap from the height and then add it to the Y to shorten each bar without changing position
+        bar.height = Math.ceil(this.yScale(offset0) - this.yScale(offset1)) - this.stackedBarsGap;
         bar.x = 0;
-        bar.y = this.yScale(offset1);
+        bar.y = Math.ceil(this.yScale(offset1)) + this.stackedBarsGap;
         bar.offset0 = offset0;
         bar.offset1 = offset1;
       } else if (this.type === 'normalized') {
