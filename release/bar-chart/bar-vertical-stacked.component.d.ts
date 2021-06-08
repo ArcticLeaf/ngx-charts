@@ -60,8 +60,11 @@ export declare class BarVerticalStackedComponent extends BaseChartComponent {
         colors: any;
         domain: any[];
         title: any;
+        tooltipFunc: (x: any) => number;
         position: string;
     };
+    getSeriesTotal(seriesName: any): number;
+    getGroupTotal(groupName: any): number;
     updateYAxisWidth({ width }: {
         width: any;
     }): void;

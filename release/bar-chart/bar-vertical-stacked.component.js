@@ -181,11 +181,13 @@ var BarVerticalStackedComponent = /** @class */ (function (_super) {
         this.colors = new ColorHelper(this.scheme, this.schemeType, domain, this.customColors);
     };
     BarVerticalStackedComponent.prototype.getLegendOptions = function () {
+        var _this = this;
         var opts = {
             scaleType: this.schemeType,
             colors: undefined,
             domain: [],
             title: undefined,
+            tooltipFunc: function (x) { return _this.getSeriesTotal(x); },
             position: this.legendPosition
         };
         if (opts.scaleType === 'ordinal') {
@@ -198,6 +200,32 @@ var BarVerticalStackedComponent = /** @class */ (function (_super) {
             opts.colors = this.colors.scale;
         }
         return opts;
+    };
+    BarVerticalStackedComponent.prototype.getSeriesTotal = function (seriesName) {
+        var sum = 0;
+        for (var _i = 0, _a = this.results; _i < _a.length; _i++) {
+            var group = _a[_i];
+            for (var _b = 0, _c = group.series; _b < _c.length; _b++) {
+                var series = _c[_b];
+                if (series.name === seriesName) {
+                    sum += series.value;
+                }
+            }
+        }
+        return sum;
+    };
+    BarVerticalStackedComponent.prototype.getGroupTotal = function (groupName) {
+        var sum = 0;
+        for (var _i = 0, _a = this.results; _i < _a.length; _i++) {
+            var group = _a[_i];
+            if (group.name === groupName) {
+                for (var _b = 0, _c = group.series; _b < _c.length; _b++) {
+                    var series = _c[_b];
+                    sum += series.value;
+                }
+            }
+        }
+        return sum;
     };
     BarVerticalStackedComponent.prototype.updateYAxisWidth = function (_a) {
         var width = _a.width;

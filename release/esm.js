@@ -1179,7 +1179,7 @@ var ChartComponent = /** @class */ (function () {
         Component({
             providers: [TooltipService],
             selector: 'ngx-charts-chart',
-            template: "\n    <div\n      class=\"ngx-charts-outer\"\n      [style.width.px]=\"view[0]\"\n      [@animationState]=\"'active'\"\n      [@.disabled]=\"!animations\">\n      <svg\n        class=\"ngx-charts\"\n        [attr.width]=\"chartWidth\"\n        [attr.height]=\"chartHeight\">\n        <ng-content></ng-content>\n      </svg>\n      <ngx-charts-scale-legend\n        *ngIf=\"showLegend && legendType === 'scaleLegend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [valueRange]=\"legendOptions.domain\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\">\n      </ngx-charts-scale-legend>\n      <ngx-charts-legend\n        *ngIf=\"showLegend && legendType === 'legend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [data]=\"legendOptions.domain\"\n        [title]=\"legendOptions.title\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\"\n        [activeEntries]=\"activeEntries\"\n        (labelClick)=\"legendLabelClick.emit($event)\"\n        (labelActivate)=\"legendLabelActivate.emit($event)\"\n        (labelDeactivate)=\"legendLabelDeactivate.emit($event)\">\n      </ngx-charts-legend>\n    </div>\n  ",
+            template: "\n    <div\n      class=\"ngx-charts-outer\"\n      [style.width.px]=\"view[0]\"\n      [@animationState]=\"'active'\"\n      [@.disabled]=\"!animations\">\n      <svg\n        class=\"ngx-charts\"\n        [attr.width]=\"chartWidth\"\n        [attr.height]=\"chartHeight\">\n        <ng-content></ng-content>\n      </svg>\n      <ngx-charts-scale-legend\n        *ngIf=\"showLegend && legendType === 'scaleLegend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [valueRange]=\"legendOptions.domain\"\n        [colors]=\"legendOptions.colors\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\">\n      </ngx-charts-scale-legend>\n      <ngx-charts-legend\n        *ngIf=\"showLegend && legendType === 'legend'\"\n        class=\"chart-legend\"\n        [horizontal]=\"legendOptions && legendOptions.position === 'below'\"\n        [data]=\"legendOptions.domain\"\n        [title]=\"legendOptions.title\"\n        [colors]=\"legendOptions.colors\"\n        [tooltipDisabled]=\"legendOptions.tooltipDisabled\"\n        [tooltipFunc]=\"legendOptions.tooltipFunc\"\n        [height]=\"view[1]\"\n        [width]=\"legendWidth\"\n        [activeEntries]=\"activeEntries\"\n        (labelClick)=\"legendLabelClick.emit($event)\"\n        (labelActivate)=\"legendLabelActivate.emit($event)\"\n        (labelDeactivate)=\"legendLabelDeactivate.emit($event)\">\n      </ngx-charts-legend>\n    </div>\n  ",
             changeDetection: ChangeDetectionStrategy.OnPush,
             animations: [
                 trigger('animationState', [
@@ -1216,6 +1216,7 @@ var LegendComponent = /** @class */ (function () {
     function LegendComponent(cd) {
         this.cd = cd;
         this.horizontal = false;
+        this.tooltipDisabled = true;
         this.labelClick = new EventEmitter();
         this.labelActivate = new EventEmitter();
         this.labelDeactivate = new EventEmitter();
@@ -1236,10 +1237,16 @@ var LegendComponent = /** @class */ (function () {
                 return i.label === formattedLabel;
             });
             if (idx === -1) {
+                var tooltipText = void 0;
+                if (this_1.tooltipFunc && !this_1.tooltipDisabled) {
+                    var value = this_1.tooltipFunc(label);
+                    tooltipText = "\n            <span class=\"tooltip-label\">" + formattedLabel + "</span>\n            <span class=\"tooltip-val\">" + value.toLocaleString() + "</span>\n          ";
+                }
                 items.push({
                     label: label,
                     formattedLabel: formattedLabel,
-                    color: this_1.colors.getColor(label)
+                    color: this_1.colors.getColor(label),
+                    tooltipText: tooltipText,
                 });
             }
         };
@@ -1297,6 +1304,14 @@ var LegendComponent = /** @class */ (function () {
         __metadata("design:type", Object)
     ], LegendComponent.prototype, "horizontal", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], LegendComponent.prototype, "tooltipDisabled", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Function)
+    ], LegendComponent.prototype, "tooltipFunc", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", typeof (_a = typeof EventEmitter !== "undefined" && EventEmitter) === "function" ? _a : Object)
     ], LegendComponent.prototype, "labelClick", void 0);
@@ -1311,7 +1326,7 @@ var LegendComponent = /** @class */ (function () {
     LegendComponent = __decorate([
         Component({
             selector: 'ngx-charts-legend',
-            template: "\n    <div [style.width.px]=\"width\">\n      <header class=\"legend-title\" *ngIf=\"title?.length > 0\">\n        <span class=\"legend-title-text\">{{title}}</span>\n      </header>\n      <div class=\"legend-wrap\">\n        <ul class=\"legend-labels\"\n            [class.horizontal-legend]=\"horizontal\"\n          [style.max-height.px]=\"height - 45\">\n          <li\n            *ngFor=\"let entry of legendEntries; trackBy: trackBy\"\n            class=\"legend-label\">\n            <ngx-charts-legend-entry\n              [label]=\"entry.label\"\n              [formattedLabel]=\"entry.formattedLabel\"\n              [color]=\"entry.color\"\n              [isActive]=\"isActive(entry)\"\n              (select)=\"labelClick.emit($event)\"\n              (activate)=\"activate($event)\"\n              (deactivate)=\"deactivate($event)\">\n            </ngx-charts-legend-entry>\n          </li>\n        </ul>\n      </div>\n    </div>\n  ",
+            template: "\n    <div [style.width.px]=\"width\">\n      <header class=\"legend-title\" *ngIf=\"title?.length > 0\">\n        <span class=\"legend-title-text\">{{title}}</span>\n      </header>\n      <div class=\"legend-wrap\">\n        <ul class=\"legend-labels\"\n            [class.horizontal-legend]=\"horizontal\"\n          [style.max-height.px]=\"height - 45\">\n          <li\n            *ngFor=\"let entry of legendEntries; trackBy: trackBy\"\n            class=\"legend-label\">\n            <ngx-charts-legend-entry\n              [label]=\"entry.label\"\n              [formattedLabel]=\"entry.formattedLabel\"\n              [color]=\"entry.color\"\n              [isActive]=\"isActive(entry)\"\n\n              ngx-tooltip\n              [tooltipDisabled]=\"tooltipDisabled || !tooltipFunc\"\n              [tooltipPlacement]=\"'top'\"\n              [tooltipType]=\"'tooltip'\"\n              [tooltipTitle]=\"entry.tooltipText\"\n\n              (select)=\"labelClick.emit($event)\"\n              (activate)=\"activate($event)\"\n              (deactivate)=\"deactivate($event)\">\n            </ngx-charts-legend-entry>\n          </li>\n        </ul>\n      </div>\n    </div>\n  ",
             styles: [".chart-legend{display:inline-block;padding:0;width:auto!important}.chart-legend .legend-title{white-space:nowrap;overflow:hidden;margin-left:10px;margin-bottom:5px;font-size:14px;font-weight:700}.chart-legend li,.chart-legend ul{padding:0;margin:0;list-style:none}.chart-legend .legend-wrap{width:calc(100% - 10px)}.chart-legend .legend-labels{line-height:85%;list-style:none;text-align:left;float:left;width:100%;border-radius:3px;overflow-y:auto;overflow-x:hidden;white-space:nowrap;background:rgba(0,0,0,.05)}.chart-legend .legend-labels.horizontal-legend{overflow-y:hidden;overflow-x:auto}.chart-legend .legend-labels.horizontal-legend li{display:inline-block}.chart-legend .legend-label{cursor:pointer;font-size:90%;margin:8px;color:#afb7c8}.chart-legend .legend-label:hover{color:#000;-webkit-transition:.2s;-moz-transition:.2s;transition:.2s}.chart-legend .legend-label .active .legend-label-text{color:#000}.chart-legend .legend-label-color{display:inline-block;height:15px;width:15px;margin-right:5px;color:#5b646b;border-radius:3px}.chart-legend .legend-label-text{display:inline-block;vertical-align:top;line-height:15px;font-size:12px;width:calc(100% - 20px);text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.chart-legend .legend-title-text{vertical-align:bottom;display:inline-block;line-height:16px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}"],
             encapsulation: ViewEncapsulation.None,
             changeDetection: ChangeDetectionStrategy.OnPush
@@ -8241,11 +8256,13 @@ var BarVerticalStackedComponent = /** @class */ (function (_super) {
         this.colors = new ColorHelper(this.scheme, this.schemeType, domain, this.customColors);
     };
     BarVerticalStackedComponent.prototype.getLegendOptions = function () {
+        var _this = this;
         var opts = {
             scaleType: this.schemeType,
             colors: undefined,
             domain: [],
             title: undefined,
+            tooltipFunc: function (x) { return _this.getSeriesTotal(x); },
             position: this.legendPosition
         };
         if (opts.scaleType === 'ordinal') {
@@ -8258,6 +8275,32 @@ var BarVerticalStackedComponent = /** @class */ (function (_super) {
             opts.colors = this.colors.scale;
         }
         return opts;
+    };
+    BarVerticalStackedComponent.prototype.getSeriesTotal = function (seriesName) {
+        var sum = 0;
+        for (var _i = 0, _a = this.results; _i < _a.length; _i++) {
+            var group = _a[_i];
+            for (var _b = 0, _c = group.series; _b < _c.length; _b++) {
+                var series = _c[_b];
+                if (series.name === seriesName) {
+                    sum += series.value;
+                }
+            }
+        }
+        return sum;
+    };
+    BarVerticalStackedComponent.prototype.getGroupTotal = function (groupName) {
+        var sum = 0;
+        for (var _i = 0, _a = this.results; _i < _a.length; _i++) {
+            var group = _a[_i];
+            if (group.name === groupName) {
+                for (var _b = 0, _c = group.series; _b < _c.length; _b++) {
+                    var series = _c[_b];
+                    sum += series.value;
+                }
+            }
+        }
+        return sum;
     };
     BarVerticalStackedComponent.prototype.updateYAxisWidth = function (_a) {
         var width = _a.width;

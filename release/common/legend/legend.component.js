@@ -13,6 +13,7 @@ var LegendComponent = /** @class */ (function () {
     function LegendComponent(cd) {
         this.cd = cd;
         this.horizontal = false;
+        this.tooltipDisabled = true;
         this.labelClick = new EventEmitter();
         this.labelActivate = new EventEmitter();
         this.labelDeactivate = new EventEmitter();
@@ -33,10 +34,16 @@ var LegendComponent = /** @class */ (function () {
                 return i.label === formattedLabel;
             });
             if (idx === -1) {
+                var tooltipText = void 0;
+                if (this_1.tooltipFunc && !this_1.tooltipDisabled) {
+                    var value = this_1.tooltipFunc(label);
+                    tooltipText = "\n            <span class=\"tooltip-label\">" + formattedLabel + "</span>\n            <span class=\"tooltip-val\">" + value.toLocaleString() + "</span>\n          ";
+                }
                 items.push({
                     label: label,
                     formattedLabel: formattedLabel,
-                    color: this_1.colors.getColor(label)
+                    color: this_1.colors.getColor(label),
+                    tooltipText: tooltipText,
                 });
             }
         };
@@ -93,6 +100,14 @@ var LegendComponent = /** @class */ (function () {
         __metadata("design:type", Object)
     ], LegendComponent.prototype, "horizontal", void 0);
     __decorate([
+        Input(),
+        __metadata("design:type", Boolean)
+    ], LegendComponent.prototype, "tooltipDisabled", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Function)
+    ], LegendComponent.prototype, "tooltipFunc", void 0);
+    __decorate([
         Output(),
         __metadata("design:type", EventEmitter)
     ], LegendComponent.prototype, "labelClick", void 0);
@@ -107,7 +122,7 @@ var LegendComponent = /** @class */ (function () {
     LegendComponent = __decorate([
         Component({
             selector: 'ngx-charts-legend',
-            template: "\n    <div [style.width.px]=\"width\">\n      <header class=\"legend-title\" *ngIf=\"title?.length > 0\">\n        <span class=\"legend-title-text\">{{title}}</span>\n      </header>\n      <div class=\"legend-wrap\">\n        <ul class=\"legend-labels\"\n            [class.horizontal-legend]=\"horizontal\"\n          [style.max-height.px]=\"height - 45\">\n          <li\n            *ngFor=\"let entry of legendEntries; trackBy: trackBy\"\n            class=\"legend-label\">\n            <ngx-charts-legend-entry\n              [label]=\"entry.label\"\n              [formattedLabel]=\"entry.formattedLabel\"\n              [color]=\"entry.color\"\n              [isActive]=\"isActive(entry)\"\n              (select)=\"labelClick.emit($event)\"\n              (activate)=\"activate($event)\"\n              (deactivate)=\"deactivate($event)\">\n            </ngx-charts-legend-entry>\n          </li>\n        </ul>\n      </div>\n    </div>\n  ",
+            template: "\n    <div [style.width.px]=\"width\">\n      <header class=\"legend-title\" *ngIf=\"title?.length > 0\">\n        <span class=\"legend-title-text\">{{title}}</span>\n      </header>\n      <div class=\"legend-wrap\">\n        <ul class=\"legend-labels\"\n            [class.horizontal-legend]=\"horizontal\"\n          [style.max-height.px]=\"height - 45\">\n          <li\n            *ngFor=\"let entry of legendEntries; trackBy: trackBy\"\n            class=\"legend-label\">\n            <ngx-charts-legend-entry\n              [label]=\"entry.label\"\n              [formattedLabel]=\"entry.formattedLabel\"\n              [color]=\"entry.color\"\n              [isActive]=\"isActive(entry)\"\n\n              ngx-tooltip\n              [tooltipDisabled]=\"tooltipDisabled || !tooltipFunc\"\n              [tooltipPlacement]=\"'top'\"\n              [tooltipType]=\"'tooltip'\"\n              [tooltipTitle]=\"entry.tooltipText\"\n\n              (select)=\"labelClick.emit($event)\"\n              (activate)=\"activate($event)\"\n              (deactivate)=\"deactivate($event)\">\n            </ngx-charts-legend-entry>\n          </li>\n        </ul>\n      </div>\n    </div>\n  ",
             styleUrls: ['./legend.component.css'],
             encapsulation: ViewEncapsulation.None,
             changeDetection: ChangeDetectionStrategy.OnPush

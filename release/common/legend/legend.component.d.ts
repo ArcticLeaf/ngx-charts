@@ -8,6 +8,8 @@ export declare class LegendComponent implements OnChanges {
     width: any;
     activeEntries: any;
     horizontal: boolean;
+    tooltipDisabled: boolean;
+    tooltipFunc: (label: any) => number;
     labelClick: EventEmitter<any>;
     labelActivate: EventEmitter<any>;
     labelDeactivate: EventEmitter<any>;

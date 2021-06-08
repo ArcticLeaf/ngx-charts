@@ -150,9 +150,9 @@ export class BarVerticalStackedComponent extends BaseChartComponent {
     super.update();
 
     if (!this.showDataLabel) {
-      this.dataLabelMaxHeight = {negative: 0, positive: 0};          
+      this.dataLabelMaxHeight = {negative: 0, positive: 0};
     }
-    this.margin = [10 + this.dataLabelMaxHeight.positive, 20, 10 + this.dataLabelMaxHeight.negative, 20]; 
+    this.margin = [10 + this.dataLabelMaxHeight.positive, 20, 10 + this.dataLabelMaxHeight.negative, 20];
 
     this.dims = calculateViewDimensions({
       width: this.width,
@@ -170,7 +170,7 @@ export class BarVerticalStackedComponent extends BaseChartComponent {
     });
 
     if (this.showDataLabel) {
-      this.dims.height -= this.dataLabelMaxHeight.negative;    
+      this.dims.height -= this.dataLabelMaxHeight.negative;
     }
 
     this.formatDates();
@@ -254,12 +254,12 @@ export class BarVerticalStackedComponent extends BaseChartComponent {
     return this.roundDomains ? scale.nice() : scale;
   }
 
-  onDataLabelMaxHeightChanged(event, groupIndex) {                   
+  onDataLabelMaxHeightChanged(event, groupIndex) {
     if (event.size.negative)  {
       this.dataLabelMaxHeight.negative = Math.max(this.dataLabelMaxHeight.negative, event.size.height);
     } else {
-      this.dataLabelMaxHeight.positive = Math.max(this.dataLabelMaxHeight.positive, event.size.height);              
-    }  
+      this.dataLabelMaxHeight.positive = Math.max(this.dataLabelMaxHeight.positive, event.size.height);
+    }
     if (groupIndex === (this.results.length - 1)) {
       setTimeout(() => this.update());
     }
@@ -298,6 +298,7 @@ export class BarVerticalStackedComponent extends BaseChartComponent {
       colors: undefined,
       domain: [],
       title: undefined,
+      tooltipFunc: (x) => this.getSeriesTotal(x),
       position: this.legendPosition
     };
     if (opts.scaleType === 'ordinal') {
@@ -310,6 +311,30 @@ export class BarVerticalStackedComponent extends BaseChartComponent {
     }
 
     return opts;
+  }
+
+  getSeriesTotal(seriesName: any): number {
+    let sum = 0;
+    for (const group of this.results) {
+      for (const series of group.series) {
+        if (series.name === seriesName) {
+          sum += series.value;
+        }
+      }
+    }
+    return sum;
+  }
+
+  getGroupTotal(groupName: any): number {
+    let sum = 0;
+    for (const group of this.results) {
+      if (group.name === groupName) {
+        for (const series of group.series) {
+          sum += series.value;
+        }
+      }
+    }
+    return sum;
   }
 
   updateYAxisWidth({width}) {
